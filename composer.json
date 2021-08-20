@@ -1,5 +1,5 @@
 {
-    "name": "pmaslak/php-obfuscator",
+    "name": "codwelt/php-obfuscator",
     "description": "PHP obfuscator",
     "type": "package",
     "keywords": [
@@ -12,6 +12,12 @@
             "name": "Pawel Maslak",
             "email": "pawel@maslak.it",
             "homepage": "http://maslak.it",
+            "role": "Developer"
+        },
+        {
+            "name": "Juan Carlos Rodriguez",
+            "email": "furiosojack@codwelt.com",
+            "homepage": "https://codwelt.com",
             "role": "Developer"
         }
     ],
