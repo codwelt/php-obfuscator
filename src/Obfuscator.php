@@ -7,8 +7,6 @@
 namespace pmaslak\PhpObfuscator;
 
 
-use ReflectionClass;
-
 class Obfuscator implements ObfuscatorInterface
 {
     private $directory = '';
@@ -16,13 +14,10 @@ class Obfuscator implements ObfuscatorInterface
     public $processedFiles = 0;
     public $lastProcessTime = 0;
 
-    private $core;
-
     function __construct(array $config)
     {
         $this->checkPhpVersion();
         $this->setObfuscatorDir();
-        $this->core = new Core();
         $this->injectConfiguration($config);
     }
 
@@ -62,11 +57,6 @@ class Obfuscator implements ObfuscatorInterface
         if (isset($config['obfuscation_options'])) {
             Config::setObfuscationOptions(Config::getFilteredOptions($config['obfuscation_options']));
         }
-
-        Config::$preDefinedClasses = array_flip(array_map('strtolower', get_declared_classes()));
-        Config::$preDefinedInterfaces = array_flip(array_map('strtolower', get_declared_interfaces()));
-        Config::$preDefinedTraits = function_exists('get_declared_traits') ? array_flip(array_map('strtolower', get_declared_traits())) : [];
-        Config::$preDefinedClasses = array_merge(Config::$preDefinedClasses, Config::$preDefinedInterfaces, Config::$preDefinedTraits);
     }
 
     public function obfuscateFile(string $path, string $target)
@@ -144,28 +134,40 @@ class Obfuscator implements ObfuscatorInterface
 
                 if (in_array($mimetype, Config::getAllowedMimeTypes())) {
                     $this->processFile($directory . $fileName, $target . $fileName);
-                } else {
-                    throw new \Exception('Unsupported filetype');
                 }
             }
         }
     }
 
     /**
-     * Obfuscate and save file in new path
-     *
-     * @param string $sourceFile
-     * @param string $targetFile
+     * @param $source
+     * @param $target
      * @throws \Exception
      */
-    private function processFile(string $sourceFile, string $targetFile)
+    private function processFile($source, $target)
     {
         $parameters = Config::getObfuscationOptions();
         $parameters = array_map('trim', $parameters);
 
-        $obfuscatedSource = $this->core->obfuscateFile($sourceFile, $parameters);
+        if (empty($parameters)) {
+            $parameters = '';
+        } else {
+            $parameters = '--' . implode(' --', $parameters);
+        }
 
-        file_put_contents($targetFile, $obfuscatedSource);
+        if (Config::isDebug()) {
+            $parameters = ' --debug ' . $parameters;
+        } else {
+            $parameters = ' --silent ' . $parameters;
+        }
+
+        $command = $this->getBaseCommand();
+
+        try {
+            exec($command . $source . ' -o ' . $target . $parameters);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     private function getBaseCommand(): string

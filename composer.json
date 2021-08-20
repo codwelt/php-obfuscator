@@ -1,5 +1,5 @@
 {
-    "name": "pmaslak/php-obfuscator",
+    "name": "codwelt/php-obfuscator",
     "description": "PHP obfuscator",
     "type": "package",
     "keywords": [
@@ -13,13 +13,19 @@
             "email": "pawel@maslak.it",
             "homepage": "http://maslak.it",
             "role": "Developer"
+        },
+        {
+            "name": "Juan Carlos Rodriguez",
+            "email": "furiosojack@codwelt.com",
+            "homepage": "https://codwelt.com",
+            "role": "Developer"
         }
     ],
     "require": {
         "php": "^7.1",
         "ext-fileinfo": "*",
         "ext-tokenizer": "*",
-        "nikic/php-parser": "4.2"
+        "nikic/php-parser": "^4.2"
     },
     "autoload": {
         "psr-4": {
