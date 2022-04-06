@@ -15,6 +15,6 @@ $obfuscator = new Obfuscator([
 ]);
 
 
-$obfuscator->obfuscateFile('/dir/example_file.php', '/new_dir/obfuscated_file.php');
-$obfuscator->obfuscateDirectory('/dir/to_obfuscate/', '/dir/obfuscated/');
+$obfuscator->obfuscateFile('./to_obfuscate/file_to_obfuscate.php', './obfuscated_file.php');
+//$obfuscator->obfuscateDirectory('./to_obfuscate/', './obfuscated/');
 
